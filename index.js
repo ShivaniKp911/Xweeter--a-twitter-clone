@@ -1,60 +1,58 @@
-import {tweetsData} from './data.js'
+import { tweetsData } from "./data.js";
 
+const tweetBtn = document.getElementById("tweet-btn");
+const tweetInput = document.getElementById("tweet-input");
 
-const tweetBtn = document.getElementById('tweet-btn')
-const tweetInput = document.getElementById('tweet-input')
+document.addEventListener("click", function (e) {
+  if (e.target.dataset.like) {
+    handleLikeClicked(e.target.dataset.like);
+  }
 
+  if (e.target.dataset.retweet) {
+    handleRetweetClicked(e.target.dataset.retweet);
+  }
+});
 
-// testing the text input
-tweetBtn.addEventListener('click', function(){
-    
-  
-})
+function handleLikeClicked(tweetId) {
+  const targetObject = tweetsData.find(function (tweet) {
+    return tweet.uuid === tweetId;
+  });
+  if (targetObject.isLiked) {
+    targetObject.likes--;
+  } else {
+    targetObject.likes++;
+  }
+  targetObject.isLiked = !targetObject.isLiked;
 
-
-document.addEventListener('click', function(e) {
-  
-   if(e.target.dataset.like){
-    handleLikeClicked(e.target.dataset.like)
-   }
-
-})
-
-function handleLikeClicked (tweetId){
-   
-    
-    const targetObject = tweetsData.find(function (tweet) {
-        return tweet.uuid === tweetId
-    })
-    if (targetObject.isLiked){
-        targetObject.likes--
-       
-    }
-    else {
-        targetObject.likes++ 
-       
-    }
-    targetObject.isLiked = !targetObject.isLiked
-
-    
- 
-
-    
-    render ()
+  render();
 }
 
+function handleRetweetClicked(tweetId) {
+  const targetObj = tweetsData.find(function (tweet) {
+    return tweetId === tweet.uuid;
+  });
 
+  if (targetObj.isRetweeted) {
+    targetObj.retweets--;
+  } else {
+    targetObj.retweets++;
+  }
 
-function getFeedHtml () {
-    let feedHTML = ''
-    let heartClass = ''
-    tweetsData.forEach(function (tweet){
-        if(tweet.isLiked) {
-            heartClass="liked"
-        }
-        else {
-            heartClass = ''
-        }
+  targetObj.isRetweeted = !targetObj.isRetweeted;
+  render();
+}
+
+function getFeedHtml() {
+  let feedHTML = "";
+  let heartClass = "";
+  tweetsData.forEach(function (tweet) {
+    if (tweet.isLiked) {
+      heartClass = "liked";
+    } else {
+      heartClass = "";
+    }
+
+    let retweetClass = tweet.isRetweeted ? "retweeted" : "";
     feedHTML += `<div class="tweet">
 		<div class="tweet-inner">
 			<img src="${tweet.profilePic}" class="profile-pic">
@@ -72,26 +70,21 @@ function getFeedHtml () {
 						${tweet.likes}
 					</span>
 					<span class="tweet-detail">
-                     <i class="fa-solid fa-retweet" data-retweet="${tweet.uuid}"></></i>
+                     <i class="fa-solid fa-retweet ${retweetClass}" data-retweet="${tweet.uuid}"></></i>
 						${tweet.retweets}
 					</span>
 				</div>
 			</div>
 	</div>
-</div>`
-    
-})
-return feedHTML
+</div>`;
+  });
+  return feedHTML;
 }
 
-function render () {
-    document.getElementById('feed').innerHTML = getFeedHtml()
-
+function render() {
+  document.getElementById("feed").innerHTML = getFeedHtml();
 }
 
-render()
-
-
-
+render();
 
 // adding the boilerplate
