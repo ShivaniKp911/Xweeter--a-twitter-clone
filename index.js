@@ -1,15 +1,14 @@
 import { tweetsData } from "./data.js";
 
-const tweetBtn = document.getElementById("tweet-btn");
 const tweetInput = document.getElementById("tweet-input");
 
 document.addEventListener("click", function (e) {
   if (e.target.dataset.like) {
     handleLikeClicked(e.target.dataset.like);
-  }
-
-  if (e.target.dataset.retweet) {
+  } else if (e.target.dataset.retweet) {
     handleRetweetClicked(e.target.dataset.retweet);
+  } else if (e.target.dataset.reply) {
+    handleReplyClicked(e.target.dataset.reply);
   }
 });
 
@@ -40,6 +39,18 @@ function handleRetweetClicked(tweetId) {
 
   targetObj.isRetweeted = !targetObj.isRetweeted;
   render();
+}
+
+function handleReplyClicked(tweetId) {
+  let replyHtml = "";
+  const targetObj = tweetsData.find(function (tweet) {
+    return tweetId === tweet.uuid;
+  });
+
+  if (targetObj.replies.length) {
+    console.log(targetObj.replies);
+    targetObj.replies.forEach(function (reply) {});
+  }
 }
 
 function getFeedHtml() {
@@ -74,6 +85,7 @@ function getFeedHtml() {
 						${tweet.retweets}
 					</span>
 				</div>
+                <div id="replies" class="tweet-reply"></div>
 			</div>
 	</div>
 </div>`;
