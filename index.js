@@ -49,33 +49,31 @@ function handleReplyClicked(tweetId) {
   });
 
   if (targetObj.replies.length) {
-    console.log(targetObj.replies);
-    targetObj.replies.forEach(function (reply) {
-        replyHtml += ` 
-                            <div class="tweet-inner tweet-reply">
-                                <img src="${reply.profilePic}" class="profile-pic"/>
-                                <div>
-                                    <p class="handle">${reply.handle}</p>
-                                    <p class="tweet-text">${reply.tweetText}</p>
-                                </div>
-                            </div>
-                        `  
-    });
-    console.log(replyHtml)
-  document.getElementById(`reply-${tweetId}`).innerHTML = replyHtml
- 
+    document.getElementById(`reply-${tweetId}`).classList.toggle('hidden')
   }
 
 }
 
 function getFeedHtml() {
   let feedHTML = "";
-  let heartClass = "";
   tweetsData.forEach(function (tweet) {
 
     let heartClass = tweet.isLiked ? "liked" : "";
-
     let retweetClass = tweet.isRetweeted ? "retweeted" : "";
+    let repliesHtml = "";
+    if (tweet.replies.length > 0)
+   {  tweet.replies.forEach(function (reply) {
+        repliesHtml += ` <div class="tweet-reply">
+                            <div class="tweet-inner">
+                                <img src="${reply.profilePic}" class="profile-pic"/>
+                                <div>
+                                    <p class="handle">${reply.handle}</p>
+                                    <p class="tweet-text">${reply.tweetText}</p>
+                                </div>
+                            </div>
+                        </div> `
+    });}
+
     feedHTML += `<div class="tweet">
 		<div class="tweet-inner">
 			<img src="${tweet.profilePic}" class="profile-pic">
@@ -97,7 +95,7 @@ function getFeedHtml() {
 						${tweet.retweets}
 					</span>
 				</div>
-                <div id="reply-${tweet.uuid}"></div>
+                <div id="reply-${tweet.uuid}" class="hidden">${repliesHtml}</div>
 			</div>
 	</div>
 </div>`;
