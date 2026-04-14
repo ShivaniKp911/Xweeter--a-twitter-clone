@@ -72,11 +72,8 @@ function getFeedHtml() {
   let feedHTML = "";
   let heartClass = "";
   tweetsData.forEach(function (tweet) {
-    if (tweet.isLiked) {
-      heartClass = "liked";
-    } else {
-      heartClass = "";
-    }
+
+    let heartClass = tweet.isLiked ? "liked" : "";
 
     let retweetClass = tweet.isRetweeted ? "retweeted" : "";
     feedHTML += `<div class="tweet">
