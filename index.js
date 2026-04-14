@@ -43,14 +43,29 @@ function handleRetweetClicked(tweetId) {
 
 function handleReplyClicked(tweetId) {
   let replyHtml = "";
+  
   const targetObj = tweetsData.find(function (tweet) {
     return tweetId === tweet.uuid;
   });
 
   if (targetObj.replies.length) {
     console.log(targetObj.replies);
-    targetObj.replies.forEach(function (reply) {});
+    targetObj.replies.forEach(function (reply) {
+        replyHtml += ` 
+                            <div class="tweet-inner tweet-reply">
+                                <img src="${reply.profilePic}" class="profile-pic"/>
+                                <div>
+                                    <p class="handle">${reply.handle}</p>
+                                    <p class="tweet-text">${reply.tweetText}</p>
+                                </div>
+                            </div>
+                        `  
+    });
+    console.log(replyHtml)
+  document.getElementById(`reply-${tweetId}`).innerHTML = replyHtml
+ 
   }
+
 }
 
 function getFeedHtml() {
@@ -85,7 +100,7 @@ function getFeedHtml() {
 						${tweet.retweets}
 					</span>
 				</div>
-                <div id="replies" class="tweet-reply"></div>
+                <div id="reply-${tweet.uuid}"></div>
 			</div>
 	</div>
 </div>`;
@@ -100,3 +115,5 @@ function render() {
 render();
 
 // adding the boilerplate
+
+   
