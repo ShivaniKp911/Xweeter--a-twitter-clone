@@ -1,4 +1,5 @@
 import { tweetsData } from "./data.js";
+import { v4 as uuidv4 } from "https://esm.sh/uuid";
 
 const tweetInput = document.getElementById("tweet-input");
 
@@ -9,6 +10,10 @@ document.addEventListener("click", function (e) {
     handleRetweetClicked(e.target.dataset.retweet);
   } else if (e.target.dataset.reply) {
     handleReplyClicked(e.target.dataset.reply);
+  }
+
+  if (e.target.id === "tweet-btn") {
+    handleClickInput();
   }
 });
 
@@ -43,26 +48,44 @@ function handleRetweetClicked(tweetId) {
 
 function handleReplyClicked(tweetId) {
   let replyHtml = "";
-  
+
   const targetObj = tweetsData.find(function (tweet) {
     return tweetId === tweet.uuid;
   });
 
   if (targetObj.replies.length) {
-    document.getElementById(`reply-${tweetId}`).classList.toggle('hidden')
+    document.getElementById(`reply-${tweetId}`).classList.toggle("hidden");
   }
+}
 
+function handleClickInput() {
+  console.log(tweetInput.value);
+  if (tweetInput.value) {
+    const newTweet = {
+      handle: `@shivani😂`,
+      profilePic: `images/scrimbalogo.png`,
+      likes: 0,
+      retweets: 0,
+      tweetText: tweetInput.value,
+      replies: [],
+      isLiked: false,
+      isRetweeted: false,
+      uuid: uuidv4(),
+    };
+
+    tweetsData.unshift(newTweet);
+    render();
+  }
 }
 
 function getFeedHtml() {
   let feedHTML = "";
   tweetsData.forEach(function (tweet) {
-
     let heartClass = tweet.isLiked ? "liked" : "";
     let retweetClass = tweet.isRetweeted ? "retweeted" : "";
     let repliesHtml = "";
-    if (tweet.replies.length > 0)
-   {  tweet.replies.forEach(function (reply) {
+    if (tweet.replies.length > 0) {
+      tweet.replies.forEach(function (reply) {
         repliesHtml += ` <div class="tweet-reply">
                             <div class="tweet-inner">
                                 <img src="${reply.profilePic}" class="profile-pic"/>
@@ -71,8 +94,9 @@ function getFeedHtml() {
                                     <p class="tweet-text">${reply.tweetText}</p>
                                 </div>
                             </div>
-                        </div> `
-    });}
+                        </div> `;
+      });
+    }
 
     feedHTML += `<div class="tweet">
 		<div class="tweet-inner">
@@ -110,5 +134,3 @@ function render() {
 render();
 
 // adding the boilerplate
-
-   
