@@ -79,14 +79,15 @@ function handleClickInput() {
 }
 
 function getFeedHtml() {
-  let feedHTML = "";
-  tweetsData.forEach(function (tweet) {
+  let feedHTML = tweetsData.map((tweet) => {
     let heartClass = tweet.isLiked ? "liked" : "";
     let retweetClass = tweet.isRetweeted ? "retweeted" : "";
     let repliesHtml = "";
+
     if (tweet.replies.length > 0) {
-      tweet.replies.forEach(function (reply) {
-        repliesHtml += ` <div class="tweet-reply">
+      repliesHtml = tweet.replies
+        .map((reply) => {
+          return ` <div class="tweet-reply">
                             <div class="tweet-inner">
                                 <img src="${reply.profilePic}" class="profile-pic"/>
                                 <div>
@@ -95,10 +96,11 @@ function getFeedHtml() {
                                 </div>
                             </div>
                         </div> `;
-      });
+        })
+        .join("");
     }
 
-    feedHTML += `<div class="tweet">
+    return `<div class="tweet">
 		<div class="tweet-inner">
 			<img src="${tweet.profilePic}" class="profile-pic">
 			<div>
