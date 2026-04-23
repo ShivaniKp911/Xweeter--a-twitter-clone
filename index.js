@@ -63,7 +63,7 @@ function handleClickInput() {
   if (tweetInput.value) {
     const newTweet = {
       handle: `@shivani😂`,
-      profilePic: `images/scrimbalogo.png`,
+      profilePic: `images/judyhopps.png`,
       likes: 0,
       retweets: 0,
       tweetText: tweetInput.value,
@@ -79,15 +79,16 @@ function handleClickInput() {
 }
 
 function getFeedHtml() {
-  let feedHTML = tweetsData.map((tweet) => {
-    let heartClass = tweet.isLiked ? "liked" : "";
-    let retweetClass = tweet.isRetweeted ? "retweeted" : "";
-    let repliesHtml = "";
+  let feedHTML = tweetsData
+    .map((tweet) => {
+      let heartClass = tweet.isLiked ? "liked" : "";
+      let retweetClass = tweet.isRetweeted ? "retweeted" : "";
+      let repliesHtml = "";
 
-    if (tweet.replies.length > 0) {
-      repliesHtml = tweet.replies
-        .map((reply) => {
-          return ` <div class="tweet-reply">
+      if (tweet.replies.length > 0) {
+        repliesHtml = tweet.replies
+          .map((reply) => {
+            return ` <div class="tweet-reply">
                             <div class="tweet-inner">
                                 <img src="${reply.profilePic}" class="profile-pic"/>
                                 <div>
@@ -96,11 +97,11 @@ function getFeedHtml() {
                                 </div>
                             </div>
                         </div> `;
-        })
-        .join("");
-    }
+          })
+          .join("");
+      }
 
-    return `<div class="tweet">
+      return `<div class="tweet">
 		<div class="tweet-inner">
 			<img src="${tweet.profilePic}" class="profile-pic">
 			<div>
@@ -125,7 +126,8 @@ function getFeedHtml() {
 			</div>
 	</div>
 </div>`;
-  });
+    })
+    .join("");
   return feedHTML;
 }
 
